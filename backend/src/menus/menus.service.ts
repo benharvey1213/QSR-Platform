@@ -7,20 +7,17 @@ export class MenusService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async getMenus(): Promise<MenuItem[]> {
-		const menus = await this.prisma.menuItem.findMany();
-		return menus;
+		return await this.prisma.menuItem.findMany();
 	}
 
 	async addMenuItem(name: string, description: string, price: number): Promise<MenuItem> {
-		const menuItem = await this.prisma.menuItem.create({
+		return await this.prisma.menuItem.create({
 			data: {
 				name,
 				description,
 				price
 			}
 		});
-
-		return menuItem;
 	}
 
 	updateMenuItem(): string {

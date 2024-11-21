@@ -12,7 +12,7 @@ export class MenusController {
     }
 
     @Post()
-    addMenuItem(@Body() menuItem: Record<string, any>): Promise<MenuItem[]> {
+    addMenuItem(@Body() menuItem: Record<string, any>): Promise<MenuItem> {
         return this.menusService.addMenuItem(
             menuItem.name,
             menuItem.description,
