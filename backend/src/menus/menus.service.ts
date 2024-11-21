@@ -1,13 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { MenuItem } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MenusService {
-	getMenus(): string {
-		return 'Hello Menus!';
+	constructor(private readonly prisma: PrismaService) {}
+
+	async getMenus(): Promise<MenuItem[]> {
+		const menus = await this.prisma.menuItem.findMany();
+		return menus;
 	}
 
-	addMenuItem(): string {
-		return 'Menu Item Added!';
+	async addMenuItem(name: string, description: string, price: number): Promise<MenuItem> {
+		const menuItem = await this.prisma.menuItem.create({
+			data: {
+				name,
+				description,
+				price
+			}
+		});
+
+		return menuItem;
 	}
 
 	updateMenuItem(): string {
