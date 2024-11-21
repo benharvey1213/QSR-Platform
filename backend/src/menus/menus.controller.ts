@@ -28,8 +28,8 @@ export class MenusController {
         return this.menusService.updateMenuItem(+id, menuItem.name, menuItem.description, menuItem.price);
     }
 
-    @Delete()
-    deleteMenuItem(): string {
-        return this.menusService.deleteMenuItem();
+    @Delete(':id')
+    deleteMenuItem(@Param('id') id: number) {
+        return this.menusService.deleteMenuItem(+id);
     }
 }

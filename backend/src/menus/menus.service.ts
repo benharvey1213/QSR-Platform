@@ -31,7 +31,9 @@ export class MenusService {
 		});
 	}
 
-	deleteMenuItem(): string {
-		return 'Menu Item Deleted!';
+	deleteMenuItem(id: number) {
+		return this.prisma.menuItem.delete({
+			where: { id }
+		});
 	}
 }
