@@ -1,4 +1,3 @@
 export const jwtConstants = {
-    // TODO: hook into .env
-    secret: "TEST-SECRET"
+    secret: process.env.JWT_SECRET
 };
