@@ -20,8 +20,15 @@ export class MenusService {
 		});
 	}
 
-	updateMenuItem(): string {
-		return 'Menu Item Updated!';
+	async updateMenuItem(id: number, name?: string, description?: string, price?: number): Promise<MenuItem> {
+		return await this.prisma.menuItem.update({
+			where: { id },
+			data: {
+				...(name && { name }),
+				...(description && { description }),
+				...(price !== undefined && { price })
+			}
+		});
 	}
 
 	deleteMenuItem(): string {

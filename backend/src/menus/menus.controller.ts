@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { MenusService } from './menus.service';
 import { MenuItem } from '@prisma/client';
 
@@ -20,9 +20,12 @@ export class MenusController {
         );
     }
 
-    @Put()
-    updateMenuItem(): string {
-        return this.menusService.updateMenuItem();
+    @Put(':id')
+    updateMenuItem(
+        @Param('id') id: number,
+        @Body() menuItem: Record<string, any>
+    ): Promise<MenuItem> {
+        return this.menusService.updateMenuItem(+id, menuItem.name, menuItem.description, menuItem.price);
     }
 
     @Delete()
