@@ -37,4 +37,33 @@ export class AuthService {
 	async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
 		return compare(plainPassword, hashedPassword);
 	}
+
+	async getUserFromToken(token: string) {
+		if (!token) {
+		  	throw new UnauthorizedException('Token missing');
+		}
+
+		let decodedToken : any;
+
+		try {
+		  	decodedToken = this.jwtService.verify(token); // Verify the token
+		}
+		catch (error) {
+		  	throw new UnauthorizedException('Invalid token');
+		}
+
+		const userId = decodedToken.sub;
+
+		if (!userId) {
+			throw new UnauthorizedException('User ID missing in token')
+		}
+
+		const user = await this.usersService.findByID(userId);
+
+		if (!user) {
+			throw new UnauthorizedException('User not found');
+		}
+
+		return user;
+	}
 }
