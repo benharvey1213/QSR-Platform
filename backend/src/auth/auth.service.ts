@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,18 @@ export class AuthService {
 		if (!user || !comparedPassword) {
 			throw new UnauthorizedException();
 		}
+
+		const payload = { sub: user.id, email: user.email }
+
+		return {
+			access_token: await this.jwtService.signAsync(payload),
+		}
+	}
+
+	async register(email: string, password: string, role: Role): Promise<{ access_token: string }> {
+		const hashedPassword = await this.hashPassword(password);
+
+		const user = await this.usersService.create(email, hashedPassword, role);
 
 		const payload = { sub: user.id, email: user.email }
 
