@@ -23,6 +23,10 @@ export class UsersService {
 	}
 
 	async findOne(email: string): Promise<User | undefined> {
+		if (!email) {
+			return undefined;
+		}
+		
 		return this.prisma.user.findUnique({
 			where: {
 				email: email,
