@@ -74,4 +74,33 @@ describe('AuthService', () => {
 			expect(usersService.create).toHaveBeenCalledWith('test@example.com', hashedPassword, Role.ADMIN);
 		})
 	})
+
+	describe('getUserFromToken', () => {
+		it('should return a user for a valid token', async () => {
+			const user = { id: 1, email: 'test@example.com', role: Role.ADMIN }
+			jwtService.verify.mockReturnValue({ sub: 1 });
+			usersService.findByID.mockResolvedValue(user);
+
+			const result = await authService.getUserFromToken('valid_token');
+
+			expect(result).toEqual(user);
+			expect(jwtService.verify).toHaveBeenCalledWith('valid_token');
+			expect(usersService.findByID).toHaveBeenCalledWith(1);
+		})
+
+		it('should throw UnauthorizedException for invalid token', async () => {
+			jwtService.verify.mockImplementation(() => {
+				throw new Error('Invalid token');
+			})
+
+			await expect(authService.getUserFromToken('invalid_token')).rejects.toThrow(UnauthorizedException);
+		})
+
+		it('should throw UnauthorizedException if user is not found', async () => {
+			jwtService.verify.mockReturnValue({ sub: 1 });
+			usersService.findByID.mockResolvedValue(null);
+
+			await expect(authService.getUserFromToken('valid_token')).rejects.toThrow(UnauthorizedException);
+		})
+	})
 });
