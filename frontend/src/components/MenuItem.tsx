@@ -83,8 +83,6 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
                 <span className="leading-none mb-[3px]">Back</span>
             </Link>
 
-            {/* <h1 className="text-2xl font-bold">Menu Item</h1> */}
-
             <div className="grid gap-5">
                 <Input readOnly={role !== Role.ADMIN} placeholder="Name" value={name} setValue={setName}/>
                 <Input readOnly={role !== Role.ADMIN} placeholder="Description" value={description} setValue={setDescription}/>

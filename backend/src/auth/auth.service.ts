@@ -60,7 +60,7 @@ export class AuthService {
 		let decodedToken : any;
 
 		try {
-		  	decodedToken = this.jwtService.verify(token); // Verify the token
+		  	decodedToken = this.jwtService.verify(token);
 		}
 		catch (error) {
 		  	throw new UnauthorizedException('Invalid token');
