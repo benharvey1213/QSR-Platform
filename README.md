@@ -3,8 +3,7 @@ https://qsr-platform-frontend.web.app
 
 # Setup for Local Environment
 ## Backend
-- Ensure PostgreSQL is installed
-- Create a new Postgres Database
+- Set up Postgres (can use `backend/setup_postgres_{mac/win}.{sh/ps1}` scripts)
 - `cd backend`
 - `npm install`
 - Create `.env` file (example at `.env.example`)
