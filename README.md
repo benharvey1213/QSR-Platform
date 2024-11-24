@@ -1,17 +1,19 @@
 # Setup for Local Environment
 ## Backend
 - Ensure PostgreSQL is installed
+- Create a new Postgres Database
 - `cd backend`
 - `npm install`
 - Create `.env` file (example at `.env.example`)
 - `npx prisma migrate dev --name init` to initialize db tables
 - `npm run prisma:seed` to seed database with starter data
+- `npm run start:dev` to start Nestjs server
 
 ## Frontend
 - `cd frontend`
 - `npm install`
 - Create `.env` file (example at `.env.example`)
-- `npm run dev`
+- `npm run dev` to start Vite development server
 
 # Deployed Endpoints
 Base API URL: `https://qsr-platform-backend-c4ae13a804c0.herokuapp.com`
