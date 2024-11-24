@@ -11,6 +11,7 @@ https://qsr-platform-frontend.web.app
 - `npx prisma migrate dev --name init` to initialize db tables
 - `npm run prisma:seed` to seed database with starter data
 - `npm run start:dev` to start Nestjs server
+- Import `backend/QSR-Platform.postman_collection.json` to test endpoints
 
 ## Frontend
 - `cd frontend`
