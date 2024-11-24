@@ -1,9 +1,9 @@
 export default function Button(
-    { text, onClick, loading = false }:
-    { text: string, onClick?: Function, loading?: boolean }
+    { text, onClick, loading = false, danger = false }:
+    { text: string, onClick?: Function, loading?: boolean, danger?: boolean }
 ) {
     return <button
-        className="relative bg-black w-full text-white font-bold py-4 px-4 rounded-full"
+        className={`relative transition-colors font-bold ${danger ? "text-neutral-500 bg-white hover:bg-red-500 hover:border-red-500 hover:text-white" : "bg-black text-white border-black"} w-full border py-4 px-4 rounded-full`}
         onClick={() => {
             if (onClick) {
                 onClick();

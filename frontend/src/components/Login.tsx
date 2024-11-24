@@ -32,7 +32,7 @@ export default function Login() {
             <img className="w-full max-w-[300px]" src={graphic}/>
         </div>
 
-        <div className="bg-white p-10 rounded-2xl grid items-center">
+        <div className="bg-white p-10 border rounded-2xl grid items-center">
             <div className="grid gap-16">
                 <div className="grid gap-3">
                     <h1 className="text-4xl font-bold text-center">Welcome!</h1>
