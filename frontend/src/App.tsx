@@ -85,7 +85,7 @@ export default function App() {
 					})}
 				</div>
 
-				{role !== Role.ADMIN && <span className="text-sm text-neutral-500">
+				{(role !== Role.ADMIN && menuItems.length > 0) && <span className="text-sm text-neutral-500">
 					(Adding new Menu Items is restricted to Admin users only)
 				</span>}
 			</div>
