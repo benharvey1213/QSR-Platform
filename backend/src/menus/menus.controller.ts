@@ -27,7 +27,7 @@ export class MenusController {
         return this.menusService.addMenuItem(
             menuItem.name,
             menuItem.description,
-            menuItem.price
+            +menuItem.price
         );
     }
 
@@ -37,7 +37,12 @@ export class MenusController {
         @Param('id') id: number,
         @Body() menuItem: Record<string, any>
     ): Promise<MenuItem> {
-        return this.menusService.updateMenuItem(+id, menuItem.name, menuItem.description, menuItem.price);
+        return this.menusService.updateMenuItem(
+            +id,
+            menuItem.name,
+            menuItem.description,
+            +menuItem.price
+        );
     }
 
     @Delete(':id')

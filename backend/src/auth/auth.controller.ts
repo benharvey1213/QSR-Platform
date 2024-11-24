@@ -2,6 +2,7 @@ import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get, Request }
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { Role } from '@prisma/client';
+import { UsersService } from 'src/users/users.service';
 
 class LoginDTO {
 	email: string;
@@ -16,7 +17,7 @@ class RegisterDTO {
 
 @Controller('auth')
 export class AuthController {
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private userService: UsersService) {}
 
 	@HttpCode(HttpStatus.OK)
 	@Post('login')
@@ -32,6 +33,6 @@ export class AuthController {
 	@UseGuards(AuthGuard)
 	@Get('profile')
 	getProfile(@Request() req) {
-		return req.user;
+		return this.userService.getProfile(req.user);
 	}
 }

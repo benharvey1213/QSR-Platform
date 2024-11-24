@@ -9,8 +9,6 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ redirectTo = "/login" }) => {
     const { token } = useContext(AuthContext);
 
-    console.log("tokennnn", token)
-
     if (!token) {
         return <Navigate to={redirectTo} />
     }

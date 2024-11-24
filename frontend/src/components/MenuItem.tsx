@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { ArrowLeft } from "react-feather";
 
-import { getMenuItemById, MenuItem as MenuItemDefinition } from "../service/BackendInterfaceService";
+import { createMenuItem, deleteMenuItem, getMenuItemById, MenuItem as MenuItemDefinition, updateMenuItem } from "../service/BackendInterfaceService";
 import { AuthContext } from "../contexts/AuthContext";
 
 import Input from "./Input";
@@ -19,6 +19,9 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
+
+    const [allowAction, setAllowAction] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (token && id && !newItem) {
@@ -41,10 +44,40 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
         }
     }, [item])
 
-    return <div className="bg-[#FAFAFA] w-full min-h-screen">
-        <Header title="Menu Item" color="#63A8FF"/>
+    async function saveItem() {
+        if (token) {
+            setAllowAction(false);
 
-        <div className="relative z-10 mt-[200px] max-w-[600px] bg-white mx-auto rounded-xl shadow-xl p-10 grid gap-10">
+            if (newItem) {
+                createMenuItem(token, name, description, price).then(data => {
+                    console.log('created menu item', data);
+                    navigate('/');
+                })
+            }
+            else if (item?.id) {
+                updateMenuItem(item.id, token, name, description, price).then(data => {
+                    console.log('updated menu item', data);
+                    navigate('/');
+                })
+            }
+        }
+    }
+
+    async function deleteItem() {
+        if (token && item?.id) {
+            setAllowAction(false);
+
+            deleteMenuItem(item.id, token).then(() => {
+                console.log('deleted menu item');
+                navigate('/');
+            })
+        }
+    }
+
+    return <div className="bg-[#FAFAFA] w-full min-h-screen">
+        <Header title={newItem ? "New Menu Item" : (item?.name ? item.name : "")} color="#63A8FF"/>
+
+        <div className="relative z-10 mt-[200px] max-w-[500px] bg-white mx-auto rounded-xl shadow-xl p-10 grid gap-10">
             <Link to="/" className="flex gap-2 items-center w-fit">
                 <ArrowLeft size={18}/>
                 <span className="leading-none mb-[3px]">Back</span>
@@ -58,10 +91,10 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
                 <Input placeholder="Price" value={price} setValue={setPrice} type="number"/>
             </div>
 
-            {!newItem && <div className="grid gap-3">
-                <Button text="Save"/>
-                <Button danger text="Delete"/>
-            </div>}
+            <div className="grid gap-3">
+                <Button text="Save" onClick={saveItem}/>
+                {!newItem && <Button danger text="Delete" onClick={deleteItem}/>}
+            </div>
         </div>
     </div>
 }

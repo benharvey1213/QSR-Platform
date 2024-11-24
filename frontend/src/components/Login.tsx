@@ -4,32 +4,25 @@ import Button from "./Button";
 import graphic from "../assets/undraw_content_structure_re_ebkv.svg";
 import { login } from "../service/AuthService";
 import { AuthContext } from "../contexts/AuthContext";
-import { useNavigate } from "react-router";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const [loginPending, setLoginPending] = useState(false);
-    const { setToken } = useContext(AuthContext);
-
-    const navigate = useNavigate();
+    const { setToken, setRole } = useContext(AuthContext);
 
     function onSubmit(event: any) {
         event.preventDefault();
 
         setLoginPending(true);
 
-        login({ email, password }, setToken).then(() => {
-            console.log('logged in');
-            setLoginPending(false);
-            navigate('/');
-        })
+        login({ email, password }, setToken, setRole)
     }
 
-    return <div className="w-full min-h-screen grid grid-cols-[3fr_2fr] bg-[#E9E9E9] p-3">
-        <div className="w-full h-full grid place-items-center">
-            <img className="w-full max-w-[300px]" src={graphic}/>
+    return <div className="w-full min-h-screen grid lg:grid-cols-[1fr_500px] bg-[#E9E9E9] p-3">
+        <div className="w-full h-full place-items-center hidden lg:grid">
+            <img className="w-full max-w-[400px] p-10" src={graphic}/>
         </div>
 
         <div className="bg-white p-10 border rounded-2xl grid items-center">

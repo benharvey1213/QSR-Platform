@@ -1,6 +1,6 @@
 import { API_URL } from "../main";
 
-export async function login({ email, password }: { email: string, password: string }, setToken: Function) {
+export async function login({ email, password }: { email: string, password: string }, setToken: Function, setRole: Function) {
     fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -13,6 +13,7 @@ export async function login({ email, password }: { email: string, password: stri
         if (token) {
             localStorage.setItem('token', token);
             setToken(token);
+            setRole(data.role);
             return true;
         }
         else {

@@ -11,7 +11,7 @@ export class AuthService {
 		private jwtService: JwtService
 	) {}
 
-	async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+	async signIn(email: string, pass: string): Promise<{ access_token: string, role: Role }> {
 		const user = await this.usersService.findOne(email);
 
 		if (!user) {
@@ -28,6 +28,7 @@ export class AuthService {
 
 		return {
 			access_token: await this.jwtService.signAsync(payload),
+			role: user.role,
 		}
 	}
 

@@ -41,4 +41,17 @@ export class UsersService {
 			},
 		});
 	}
+
+	async getProfile(user: any): Promise<User | undefined> {
+		const thisUser = await this.prisma.user.findUnique({
+			where: {
+				id: user.sub,
+			},
+		});
+
+		return {
+			...user,
+			role: thisUser?.role,
+		}
+	}
 }
