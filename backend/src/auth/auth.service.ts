@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
@@ -39,6 +39,14 @@ export class AuthService {
 			throw new UnauthorizedException('User already exists');
 		}
 
+		if (!role) {
+			throw new BadRequestException('Role missing');
+		}
+
+		if (!Role[role]) {
+			throw new BadRequestException('Invalid role');
+		}
+
 		const user = await this.usersService.create(email, hashedPassword, role);
 
 		const payload = { sub: user.id, email: user.email }
@@ -58,7 +66,7 @@ export class AuthService {
 
 	async getUserFromToken(token: string) {
 		if (!token) {
-		  	throw new UnauthorizedException('Token missing');
+		  	throw new BadRequestException('Token missing');
 		}
 
 		let decodedToken : any;
@@ -73,13 +81,13 @@ export class AuthService {
 		const userId = decodedToken.sub;
 
 		if (!userId) {
-			throw new UnauthorizedException('User ID missing in token')
+			throw new BadRequestException('User ID missing in token')
 		}
 
 		const user = await this.usersService.findByID(userId);
 
 		if (!user) {
-			throw new UnauthorizedException('User not found');
+			throw new NotFoundException('User not found');
 		}
 
 		return user;
@@ -87,7 +95,7 @@ export class AuthService {
 
 	async verifyToken(token: string) {
 		if (!token) {
-			throw new UnauthorizedException('Token missing');
+			throw new BadRequestException('Token missing');
 		}
 
 		try {
