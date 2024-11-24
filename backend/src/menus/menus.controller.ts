@@ -15,6 +15,12 @@ export class MenusController {
         return this.menusService.getMenus();
     }
 
+    @Get(':id')
+    @Roles('ADMIN', 'EDITOR')
+    getMenuItem(@Param('id') id: number,): Promise<MenuItem> {
+        return this.menusService.getMenuItem(+id);
+    }
+
     @Post()
     @Roles('ADMIN')
     addMenuItem(@Body() menuItem: Record<string, any>): Promise<MenuItem> {

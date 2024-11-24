@@ -10,6 +10,12 @@ export class MenusService {
 		return await this.prisma.menuItem.findMany();
 	}
 
+	async getMenuItem(id: number): Promise<MenuItem> {
+		return await this.prisma.menuItem.findUnique({
+			where: { id }
+		});
+	}
+
 	async addMenuItem(name: string, description: string, price: number): Promise<MenuItem> {
 		return await this.prisma.menuItem.create({
 			data: {

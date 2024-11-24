@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+import { API_URL } from "../main";
 
 export async function login({ email, password }: { email: string, password: string }, setToken: Function) {
     fetch(`${API_URL}/auth/login`, {
@@ -27,4 +27,25 @@ export async function login({ email, password }: { email: string, password: stri
 export function logout(setToken: Function) {
     localStorage.removeItem('token');
     setToken(null);
+}
+
+export async function verifyToken(token: string) {
+    try {
+        const response = await fetch(`${API_URL}/auth/profile`, {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json();
+    }
+    catch (error) {
+        console.error('Error verifying token:', error);
+        throw error;
+    }
 }

@@ -79,4 +79,20 @@ export class AuthService {
 
 		return user;
 	}
+
+	async verifyToken(token: string) {
+		if (!token) {
+			throw new UnauthorizedException('Token missing');
+		}
+
+		try {
+			this.jwtService.verify(token);
+			return {
+				message: 'Token is valid',
+			};
+		}
+		catch (error) {
+			throw new UnauthorizedException('Invalid token');
+		}
+	}
 }

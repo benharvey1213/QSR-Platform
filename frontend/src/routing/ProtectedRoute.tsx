@@ -2,21 +2,20 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Navigate, Outlet } from "react-router";
 
-interface PrivateRouteProps {
+interface ProtectedRouteProps {
     redirectTo?: string;
 }
 
-const ProtectedRoute: React.FC<PrivateRouteProps> = ({ redirectTo = "/login" }) => {
-    const authContext = useContext(AuthContext);
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ redirectTo = "/login" }) => {
+    const { token } = useContext(AuthContext);
 
-    console.log('authContext', authContext)
+    console.log("tokennnn", token)
 
-    if (authContext?.token) {
-        return <Outlet />
-    }
-    else {
+    if (!token) {
         return <Navigate to={redirectTo} />
     }
+
+    return <Outlet />
 }
 
 export default ProtectedRoute;
