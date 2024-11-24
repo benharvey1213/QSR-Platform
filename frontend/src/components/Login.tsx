@@ -12,12 +12,20 @@ export default function Login() {
     const [loginPending, setLoginPending] = useState(false);
     const { setToken, setRole } = useContext(AuthContext);
 
+    const [failedToAuthenticate, setFailedToAuthenticate] = useState(false);
+
     function onSubmit(event: any) {
         event.preventDefault();
 
         setLoginPending(true);
 
-        login({ email, password }, setToken, setRole)
+        login({ email, password }, setToken, setRole).then((success) => {
+            if (!success) {
+                setLoginPending(false);
+                setFailedToAuthenticate(true);
+                setPassword("");
+            }
+        })
     }
 
     return <div className="w-full min-h-screen grid lg:grid-cols-[1fr_500px] bg-[#E9E9E9] p-3">
@@ -31,11 +39,14 @@ export default function Login() {
                     <h1 className="text-4xl font-bold text-center">Welcome!</h1>
                     <p className="text-center text-sm">Please enter your details</p>
                 </div>
-                <form className="grid gap-16" onSubmit={onSubmit}>
+                <form className="grid gap-8" onSubmit={onSubmit}>
                     <div className="grid gap-5">
                         <Input required placeholder="Email" value={email} setValue={setEmail} />
                         <Input required placeholder="Password" value={password} setValue={setPassword} type="password" />
                     </div>
+
+                    <span className={`text-red-500 text-center ${failedToAuthenticate ? "" : "opacity-0"}`}>Failed to authenticate</span>
+
                     <Button text="Log In" loading={loginPending} />
                 </form>
             </div>

@@ -1,13 +1,21 @@
 import { API_URL } from "../main";
 
-export async function login({ email, password }: { email: string, password: string }, setToken: Function, setRole: Function) {
-    fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    }).then(res => res.json()).then(data => {
+export async function login(
+    { email, password }: { email: string, password: string },
+    setToken: Function,
+    setRole: Function
+): Promise<boolean> {
+    try {
+
+        const res = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+
+        const data = await res.json();
         const token = data.access_token;
 
         if (token) {
@@ -19,10 +27,11 @@ export async function login({ email, password }: { email: string, password: stri
         else {
             return false;
         }
-    }).catch(err => {
+    }
+    catch (err) {
         console.error(err);
         return false;
-    })
+    }
 }
 
 export function logout(setToken: Function) {
