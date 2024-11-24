@@ -42,7 +42,7 @@ export class MenusController {
             +id,
             menuItem.name,
             menuItem.description,
-            +menuItem.price
+            menuItem.price
         );
     }
 

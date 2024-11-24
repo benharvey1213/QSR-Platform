@@ -28,13 +28,17 @@ export class MenusService {
 	}
 
 	async updateMenuItem(id: number, name?: string, description?: string, price?: number): Promise<MenuItem> {
+		if (!id) return null;
+		
+		let updateData = {};
+
+		if (name) updateData['name'] = name;
+		if (description) updateData['description'] = description;
+		if (price !== undefined && price !== null) updateData['price'] = +price;
+
 		return await this.prisma.menuItem.update({
 			where: { id },
-			data: {
-				...(name && { name }),
-				...(description && { description }),
-				...(price !== undefined && { price })
-			}
+			data: updateData
 		});
 	}
 
