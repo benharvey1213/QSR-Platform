@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { ArrowLeft } from "react-feather";
 
-import { createMenuItem, deleteMenuItem, getMenuItemById, MenuItem as MenuItemDefinition, updateMenuItem } from "../service/BackendInterfaceService";
+import { createMenuItem, deleteMenuItem, getMenuItemById, MenuItem as MenuItemDefinition, Role, updateMenuItem } from "../service/BackendInterfaceService";
 import { AuthContext } from "../contexts/AuthContext";
 
 import Input from "./Input";
@@ -12,7 +12,7 @@ import Header from "./Header";
 
 export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
     const { id } = useParams();
-    const { token } = useContext(AuthContext);
+    const { token, role } = useContext(AuthContext);
 
     const [item, setItem] = useState<MenuItemDefinition | null>(null);
 
@@ -77,7 +77,7 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
     return <div className="bg-[#FAFAFA] w-full min-h-screen">
         <Header title={newItem ? "New Menu Item" : (item?.name ? item.name : "")} color="#63A8FF"/>
 
-        <div className="relative z-10 mt-[200px] max-w-[500px] bg-white mx-auto rounded-xl shadow-xl p-10 grid gap-10">
+        <div className="relative z-10 mt-[200px] max-w-[500px] bg-white mx-auto border rounded-xl shadow-xl p-10 grid gap-10">
             <Link to="/" className="flex gap-2 items-center w-fit">
                 <ArrowLeft size={18}/>
                 <span className="leading-none mb-[3px]">Back</span>
@@ -86,15 +86,15 @@ export default function MenuItem({ newItem = false } : { newItem?: boolean }) {
             {/* <h1 className="text-2xl font-bold">Menu Item</h1> */}
 
             <div className="grid gap-5">
-                <Input placeholder="Name" value={name} setValue={setName}/>
-                <Input placeholder="Description" value={description} setValue={setDescription}/>
-                <Input placeholder="Price" value={price} setValue={setPrice} type="number"/>
+                <Input readOnly={role !== Role.ADMIN} placeholder="Name" value={name} setValue={setName}/>
+                <Input readOnly={role !== Role.ADMIN} placeholder="Description" value={description} setValue={setDescription}/>
+                <Input readOnly={role !== Role.ADMIN} placeholder="Price" value={price} setValue={setPrice} type="number"/>
             </div>
 
-            <div className="grid gap-3">
-                <Button text="Save" onClick={saveItem}/>
-                {!newItem && <Button danger text="Delete" onClick={deleteItem}/>}
-            </div>
+            {role == Role.ADMIN ? <div className="grid gap-3">
+                <Button loading={!allowAction} text="Save" onClick={saveItem}/>
+                {!newItem && <Button loading={!allowAction} danger text="Delete" onClick={deleteItem}/>}
+            </div> : <span className="text-sm text-neutral-500">(Editing is restricted to Admin users only)</span>}
         </div>
     </div>
 }

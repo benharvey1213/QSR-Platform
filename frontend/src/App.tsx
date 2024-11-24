@@ -58,29 +58,36 @@ export default function App() {
 		<Header title="All Menu Items" color="#63A8FF"/>
 
 		<div className="relative mt-[200px] z-10">
-			<div className="max-w-[800px] mx-auto grid grid-cols-3 gap-5">
-				{role == Role.ADMIN && <Card enabled to="/menu-item/new">
-					<div className="w-full h-full grid place-items-center">
-						<div className="flex items-center gap-1">
-							<Plus size={24}/>
-							<h2 className="text-xl leading-none mb-[3px]">New</h2>
-						</div>
-					</div>
-				</Card>}
+			<div className="max-w-[850px] mx-auto grid gap-5 px-5">
+				<div className="grid  md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-				{menuItems.map(item => {
-					return <Card enabled={role == Role.ADMIN} to={`/menu-item/${item.id}`} key={item.id}>
-						<div className="grid p-8 gap-2">
-							<div className="grid grid-cols-[1fr_auto]">
-								<h2 className="font-bold text-xl">{item.name}</h2>
-								{role == Role.ADMIN && <ArrowRight size={24} className="mt-1 transition-transform group-hover:translate-x-[10px]"/>}
+					{role == Role.ADMIN && <Card enabled to="/menu-item/new">
+						<div className="w-full h-full grid place-items-center">
+							<div className="flex items-center gap-1">
+								<Plus size={24}/>
+								<h2 className="text-xl leading-none mb-[3px]">New</h2>
 							</div>
-
-							<p className="text-xs text-neutral-500">{item.description}</p>
-							<p className="pt-1">{formatPrice(item.price)}</p>
 						</div>
-					</Card>
-				})}
+					</Card>}
+
+					{menuItems.map(item => {
+						return <Card enabled to={`/menu-item/${item.id}`} key={item.id}>
+							<div className="grid p-8 gap-2">
+								<div className="grid grid-cols-[1fr_auto]">
+									<h2 className="font-bold text-xl">{item.name}</h2>
+									<ArrowRight size={24} className="mt-1 transition-transform group-hover:translate-x-[10px]"/>
+								</div>
+
+								<p className="text-xs text-neutral-500">{item.description}</p>
+								<p className="pt-1">{formatPrice(item.price)}</p>
+							</div>
+						</Card>
+					})}
+				</div>
+
+				{role !== Role.ADMIN && <span className="text-sm text-neutral-500">
+					(Adding new Menu Items is restricted to Admin users only)
+				</span>}
 			</div>
 		</div>
 	</div>
