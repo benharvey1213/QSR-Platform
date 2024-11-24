@@ -103,4 +103,31 @@ describe('AuthService', () => {
 			await expect(authService.getUserFromToken('valid_token')).rejects.toThrow(UnauthorizedException);
 		})
 	})
+
+	describe('verifyToken', () => {
+		it('should throw UnauthorizedException if token is missing', async () => {
+			await expect(authService.verifyToken('')).rejects.toThrow(UnauthorizedException);
+			await expect(authService.verifyToken('')).rejects.toThrow('Token missing');
+		});
+
+		it('should return a message if the token is valid', async () => {
+			const token = 'valid-token';
+			jwtService.verify.mockReturnValue(true); // Simulating a valid token
+	  
+			const result = await authService.verifyToken(token);
+	  
+			expect(result).toEqual({ message: 'Token is valid' });
+			expect(jwtService.verify).toHaveBeenCalledWith(token); // Ensure verify was called with the token
+		});
+
+		it('should throw UnauthorizedException if the token is invalid', async () => {
+			const token = 'invalid-token';
+			jwtService.verify.mockImplementation(() => {
+			  throw new Error('Invalid token'); // Simulating an invalid token
+			});
+	  
+			await expect(authService.verifyToken(token)).rejects.toThrow(UnauthorizedException);
+			await expect(authService.verifyToken(token)).rejects.toThrow('Invalid token');
+		});
+	})
 });

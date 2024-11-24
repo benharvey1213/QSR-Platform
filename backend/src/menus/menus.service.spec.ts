@@ -12,6 +12,7 @@ describe('MenusController', () => {
 
 	const mockMenusService = {
 		getMenus: jest.fn(),
+		getMenuItem: jest.fn(),
 		addMenuItem: jest.fn(),
 		updateMenuItem: jest.fn(),
 		deleteMenuItem: jest.fn(),
@@ -63,6 +64,23 @@ describe('MenusController', () => {
 		expect(await controller.getMenu()).toBe(result);
 		expect(service.getMenus).toHaveBeenCalled();
 		});
+	});
+
+	describe('getMenuItem', () => {
+		it('should return a menu item', async () => {
+			const result: MenuItem = {
+				id: 1,
+				name: 'Item 1',
+				description: 'Desc 1',
+				price: 10,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			};
+			mockMenusService.getMenuItem.mockResolvedValue(result);
+
+			expect(await controller.getMenuItem(1)).toBe(result);
+			expect(service.getMenuItem).toHaveBeenCalledWith(1);
+		})
 	});
 
 	describe('addMenuItem', () => {
