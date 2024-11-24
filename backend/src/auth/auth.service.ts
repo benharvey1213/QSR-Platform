@@ -35,6 +35,10 @@ export class AuthService {
 	async register(email: string, password: string, role: Role): Promise<{ access_token: string }> {
 		const hashedPassword = await this.hashPassword(password);
 
+		if (await this.usersService.findOne(email)) {
+			throw new UnauthorizedException('User already exists');
+		}
+
 		const user = await this.usersService.create(email, hashedPassword, role);
 
 		const payload = { sub: user.id, email: user.email }

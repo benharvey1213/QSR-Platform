@@ -4,6 +4,7 @@ import { Role } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { Roles } from 'src/roles/roles.decorator';
 
 class LoginDTO {
 	email: string;
@@ -26,8 +27,10 @@ export class AuthController {
 		return this.authService.signIn(loginDto.email, loginDto.password);
 	}
 
+	@Roles('ADMIN')
 	@Post('register')
 	register(@Body() registerDto: RegisterDTO) {
+		console.log(registerDto);
 		return this.authService.register(registerDto.email, registerDto.password, registerDto.role);
 	}
 
